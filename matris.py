@@ -9,14 +9,19 @@ class Ex(Exception):
         return f'Error: {self.__mes}'
 
 class Matrix:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, data) -> None:
+        self.__data = self.check(data)
 
     @staticmethod
-    def check(can):
+    def check(can, t='e'):
+        # TODO: write document for this function
         """
-
+        :t -> ...
         """
-        # temp = len(can[0])
-        # for item in can:
-        #     if len(item) != temp:
+        temp = len(can[0])
+        for item in can:
+            if len(item) != temp:
+                if t == 'b' : return False
+                raise Ex('this input isn\'t matrix type...please check it')
+        if t == 'b': return True
+        return can
