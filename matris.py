@@ -36,15 +36,18 @@ class Matrix:
 
     @property
     def size(self):
-        if not self.__data[0]: return 0,0
+        if self.isEmpty: return 0,0
         return len(self.__data), len(self.__data[0])
 
     @property
     def isEmpty(self):
-        if self.__data == []:
+        if not self.__data:
             return True
         return False
 
+    def squareChecker(self):
+        temp = self.size
+        return True if temp[0] == temp[1] else False
 
     @staticmethod
     def check(can, t='e'):
