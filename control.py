@@ -1,14 +1,19 @@
 from matris import Matrix
 
 x = Matrix([
-    [1,2,3,10],
-    [4,5,6,20],
-    [7,8,9,30],
-    [7,5,3,40]
+    [5, 11, 0],
+    [4, 57, 5],
+    [4, 27, 2]
 ])
+
+# x = Matrix([
+#     [1, -1, 8],
+#     [0, 3, 1],
+#     [2, 2, 1]
+# ])
 
 y = Matrix([
     
 ])
 
-Matrix.filter(x, 0, 2)
+print(x.determineRC())

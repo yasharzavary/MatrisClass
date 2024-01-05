@@ -85,7 +85,7 @@ class Matrix:
         returnResult = []
         for row in range(r+1, len(temp)):
             returnResult += [temp[row][:c] + temp[row][1+c:]]
-        print(returnResult)
+        return Matrix(returnResult)
 
     def connect(self, other, t = True):
         # TODO: correct empty list connection 
@@ -111,7 +111,27 @@ class Matrix:
         return self.__data + self.__valid1D(other) if not t else Matrix(self.__data + self.__valid1D(other))
 
     def determineRC(self):
-        pass
+        # TODO: adding optinal row and col part
+        """
+
+        :return:
+        """
+        sizeTemp = self.size
+        if self.isEmpty: raise Ex('your matrix is empty')
+        if sizeTemp == (1, 1): return self[0][0]
+        if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+        result = 0
+        for j in range(sizeTemp[0]):
+            chrTemp = self[0][j]
+            if chrTemp == 0: continue
+            if j % 2 == 0:
+                result += chrTemp * Matrix.filter(self.__data, 0, j).determineRC()
+            else:
+                result -= chrTemp * Matrix.filter(self.__data, 0, j).determineRC()
+        return result
+
+
+
 
     def __str__(self):
         return str(self.__data)
