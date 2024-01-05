@@ -76,6 +76,17 @@ class Matrix:
 
         return [canData] if not isinstance(canData[0], list) else canData
 
+    @staticmethod
+    def filter(d, r, c):
+        if isinstance(d, Matrix):
+            temp = d.mData
+        elif isinstance(d, list):
+            temp = d
+        returnResult = []
+        for row in range(r+1, len(temp)):
+            returnResult += [temp[row][:c] + temp[row][1+c:]]
+        print(returnResult)
+
     def connect(self, other, t = True):
         # TODO: correct empty list connection 
         # TODO: from row or col connect op
