@@ -15,13 +15,18 @@ class Ex(Exception):
 
 class Matrix:
     def __init__(self, data) -> None:
-        self.__data = self.check(self.__valid1D(data)) if isinstance(data, list) else Matrix.readFile(data)
+        self.__data = self.check(self.__valid1D(data)) if isinstance(data, list) else self.check(self.__valid1D(Matrix.readFile(data)))
 
     @staticmethod
     def readFile(p):
         from os import path
         if not path.isfile(p): raise FileNotFoundError('this isn\'t valid path for file')
-        
+        with open(p) as file:
+            final = []
+            for line in file.readlines():
+                final.append([float(item) for item in list(line.split())])
+        print(final)
+        return final
 
 
     def __getitem__(self, index):
@@ -128,6 +133,7 @@ class Matrix:
         if self.isEmpty: raise Ex('your matrix is empty')
         if sizeTemp == (1, 1): return self[0]
         if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+        return self.determineG()
         result = 0
         for j in range(sizeTemp[0]):
             chrTemp = self[0][j]
@@ -169,23 +175,53 @@ class Matrix:
         if self.isEmpty: raise Ex('your matrix is empty')
         if sizeTemp == (1, 1): return self[0]
         if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+        return self.determineG()
         indexTemp = sizeTemp[0]-1
         matTemp = Matrix.filter(self.__data, 0, 0)
+        divTemp = Matrix.filter(matTemp.mData, matTemp.size[0]-1,matTemp.size[0]-1).determineR()
+        if divTemp == 0:
+            return 'we can\'t find solution with this method'
         return Matrix([[Matrix.filter(self.__data, 0, 0).determineR(),
                         Matrix.filter(self.__data, indexTemp, 0).determineR()],
                        [Matrix.filter(self.__data, 0, indexTemp).determineR(),
-                       Matrix.filter(self.__data, indexTemp, indexTemp).determineR()]]).determineR() / Matrix.filter(matTemp.mData,
-                                                                                                                    matTemp.size[0]-1,
-                                                                                                                    matTemp.size[0]-1).determineR()
+                       Matrix.filter(self.__data, indexTemp, indexTemp).determineR()]]).determineR() / divTemp
 
     def __add__(self, other):
-        pass
+        if not isinstance(other, Matrix): raise TypeError('please give two Matrix form')
+        elif self.size != other.size: raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] + other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
     def __iadd__(self, other):
-        pass
+        if not isinstance(other, Matrix):
+            raise TypeError('please give two Matrix form')
+        elif self.size != other.size:
+            raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] + other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
     def __radd__(self, other):
-        pass
+        if not isinstance(other, Matrix):
+            raise TypeError('please give two Matrix form')
+        elif self.size != other.size:
+            raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] + other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
 
     def __mul__(self, other):
@@ -200,13 +236,37 @@ class Matrix:
 
 
     def __sub__(self, other):
-        pass
+        if not isinstance(other, Matrix): raise TypeError('please give two Matrix form')
+        elif self.size != other.size: raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] - other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
     def __isub__(self, other):
-        pass
+        if not isinstance(other, Matrix): raise TypeError('please give two Matrix form')
+        elif self.size != other.size: raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] - other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
     def __rsub__(self, other):
-        pass
+        if not isinstance(other, Matrix): raise TypeError('please give two Matrix form')
+        elif self.size != other.size: raise Ex('Matrix must have same size for adding')
+        temp = []
+        for i in range(self.size[0]):
+            temp2 = []
+            for j in range(self.size[1]):
+                temp2.append(self[i][j] - other[i][j])
+            temp.append(temp2)
+        return Matrix(temp)
 
 
 
