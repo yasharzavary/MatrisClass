@@ -3,10 +3,11 @@ from matris import Matrix
 x = Matrix([
     [1,2,3],
     [4,5,6],
+    [7,8,9]
 ])
 
 y = Matrix=([
     7,8,9
 ])
 
-print(x.connect(y))
+print(x[1][2])

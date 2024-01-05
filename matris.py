@@ -17,6 +17,15 @@ class Matrix:
     def __init__(self, data) -> None:
         self.__data = self.check(self.__valid1D(data))
 
+    def __getitem__(self, index):
+        temp = self.__data
+        if isinstance(index, slice):
+            return Matrix(temp[index.start:index.stop:index.step]) if len(temp) != 1 else temp[0][index.start:index.stop:index.step]
+        try:
+            return Matrix(temp[index]) if len(temp) != 1 else temp[0][index]
+        except:
+            raise IndexError('check your index for matrix')
+
     @property
     def mData(self):
         return self.__data
@@ -44,6 +53,7 @@ class Matrix:
         """
         """
         if not canData: return [[]]
+        # for type similarity checking
         rule = type(canData[0])
         for item in canData:
             if isinstance(item, tuple) or isinstance(item, set): raise TypeError('please use just list in matrix')
