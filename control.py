@@ -6,8 +6,8 @@ x = Matrix([
     [7,8,9]
 ])
 
-y = Matrix=([
-    7,8,9
+y = Matrix([
+    
 ])
 
-print(x[1][2])
+print(y.size)

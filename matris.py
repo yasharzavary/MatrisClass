@@ -34,9 +34,10 @@ class Matrix:
     def mData(self, newData):
         self.__data = self.check(newData)
 
-
+    @property
     def size(self):
-        pass
+        if not self.__data[0]: return 0,0
+        return len(self.__data), len(self.__data[0])
 
     @property
     def isEmpty(self):
