@@ -15,7 +15,7 @@ class Ex(Exception):
 
 class Matrix:
     def __init__(self, data) -> None:
-        self.__data = data if self.check(data) else self.__valid1D(data)
+        self.__data = self.check(self.__valid1D(data))
 
     @property
     def mData(self):
@@ -31,24 +31,36 @@ class Matrix:
         """
         :t -> ...
         """
-
-        for item in can:
-            if not isinstance(item,  list): return False
+        if t not in 'eb': raise Ex('invalid input for return type')
         temp = len(can[0])
         for item in can:
             if len(item) != temp:
                 if t == 'b' : return False
                 raise Ex('this input isn\'t matrix type...please check it')
-        return True
+        return True if t == 'b' else can
 
     def __valid1D(self, canData):
+        # TODO: write document 
+        """
+        """
+        if not canData: return [[]]
+        rule = type(canData[0])
         for item in canData:
-            if isinstance(item, tuple) or isinstance(item, set): raise TypeError('please use list in matrix')
-            if isinstance(item, list): raise TypeError('invalid matrix, please check rows and columns')
-        return [canData]
+            if isinstance(item, tuple) or isinstance(item, set): raise TypeError('please use just list in matrix')
+            if type(item) != rule: raise TypeError('please recheck the matrix ingridents')
 
-    def connect(self, other):
-        pass
+        return [canData] if not isinstance(canData[0], list) else canData
+
+    def connect(self, other, t = True):
+        """
+        it will connect two matrix with togheter and send it back
+        other: second matrix or list for connecting
+        t: you can set it to False to return list 
+        return: one matrix(in list type)
+        """
+        if isinstance(other, Matrix) : return self.__data + other.mData if not t else Matrix(self.__data + other.mData)
+        if not isinstance(other, list): raise TypeError('please check second matrix')
+        return self.__data + self.__valid1D(other) if not t else Matrix(self.__data + self.__valid1D(other))
 
     def determineRC(self):
         pass
