@@ -69,11 +69,11 @@ class Matrix:
         """
         if not canData: return [[]]
         # for type similarity checking
-        rule = type(canData[0])
+        hnList = False
         for item in canData:
             if isinstance(item, tuple) or isinstance(item, set): raise TypeError('please use just list in matrix')
-            if type(item) != rule: raise TypeError('please recheck the matrix ingridents')
-
+            if not isinstance(item, list): hnList=True
+            if isinstance(item, list) and hnList: raise TypeError('please recheck the matrix ingridents')
         return [canData] if not isinstance(canData[0], list) else canData
 
     @staticmethod
@@ -129,6 +129,35 @@ class Matrix:
             else:
                 result -= chrTemp * Matrix.filter(self.__data, 0, j).determineRC()
         return result
+
+    def determineG(self):
+        """
+
+        :return:
+        """
+        detMul = 1
+        mTemp = self.__data.copy()
+        sizeTemp = self.size
+        if self.isEmpty: raise Ex('your matrix is empty')
+        if sizeTemp == (1, 1): return self[0][0]
+        if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+        if mTemp[0][0] == 0:
+            for row in range(sizeTemp[0]):
+                if mTemp[row][0] != 0:
+                    mTemp[row], mTemp[0] = mTemp[0], mTemp[row]
+            if mTemp[0][0] == 0:
+                return 0
+            detMul = -1
+        result = 0
+        for row in range(1, sizeTemp[0]):
+            mulTemp = mTemp[row][0] / mTemp[0][0]
+            for col in range(sizeTemp[1]):
+                mTemp[row][col] -= mTemp[0][col] * mulTemp
+
+        return mTemp[0][0] * Matrix.filter(self.__data, 0, 0).determineG() * detMul
+
+
+
 
 
 
