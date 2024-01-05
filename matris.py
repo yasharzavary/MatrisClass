@@ -15,7 +15,14 @@ class Ex(Exception):
 
 class Matrix:
     def __init__(self, data) -> None:
-        self.__data = self.check(self.__valid1D(data))
+        self.__data = self.check(self.__valid1D(data)) if isinstance(data, list) else Matrix.readFile(data)
+
+    @staticmethod
+    def readFile(p):
+        from os import path
+        if not path.isfile(p): raise FileNotFoundError('this isn\'t valid path for file')
+        
+
 
     def __getitem__(self, index):
         temp = self.__data
@@ -83,7 +90,8 @@ class Matrix:
         elif isinstance(d, list):
             temp = d
         returnResult = []
-        for row in range(r+1, len(temp)):
+        for row in range(len(temp)):
+            if row == r: continue
             returnResult += [temp[row][:c] + temp[row][1+c:]]
         return Matrix(returnResult)
 
@@ -118,7 +126,7 @@ class Matrix:
         """
         sizeTemp = self.size
         if self.isEmpty: raise Ex('your matrix is empty')
-        if sizeTemp == (1, 1): return self[0][0]
+        if sizeTemp == (1, 1): return self[0]
         if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
         result = 0
         for j in range(sizeTemp[0]):
@@ -139,7 +147,7 @@ class Matrix:
         mTemp = self.__data.copy()
         sizeTemp = self.size
         if self.isEmpty: raise Ex('your matrix is empty')
-        if sizeTemp == (1, 1): return self[0][0]
+        if sizeTemp == (1, 1): return self[0]
         if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
         if mTemp[0][0] == 0:
             for row in range(sizeTemp[0]):
@@ -156,8 +164,49 @@ class Matrix:
 
         return mTemp[0][0] * Matrix.filter(self.__data, 0, 0).determineG() * detMul
 
+    def determineR(self):
+        sizeTemp = self.size
+        if self.isEmpty: raise Ex('your matrix is empty')
+        if sizeTemp == (1, 1): return self[0]
+        if sizeTemp == (2, 2): return (self[0][0] * self[1][1]) - (self[1][0] * self[0][1])
+        indexTemp = sizeTemp[0]-1
+        matTemp = Matrix.filter(self.__data, 0, 0)
+        return Matrix([[Matrix.filter(self.__data, 0, 0).determineR(),
+                        Matrix.filter(self.__data, indexTemp, 0).determineR()],
+                       [Matrix.filter(self.__data, 0, indexTemp).determineR(),
+                       Matrix.filter(self.__data, indexTemp, indexTemp).determineR()]]).determineR() / Matrix.filter(matTemp.mData,
+                                                                                                                    matTemp.size[0]-1,
+                                                                                                                    matTemp.size[0]-1).determineR()
+
+    def __add__(self, other):
+        pass
+
+    def __iadd__(self, other):
+        pass
+
+    def __radd__(self, other):
+        pass
 
 
+    def __mul__(self, other):
+        pass
+
+
+    def __imul__(self, other):
+        pass
+
+    def __rmul__(self, other):
+        pass
+
+
+    def __sub__(self, other):
+        pass
+
+    def __isub__(self, other):
+        pass
+
+    def __rsub__(self, other):
+        pass
 
 
 
@@ -165,5 +214,6 @@ class Matrix:
     def __str__(self):
         return str(self.__data)
     
-
+    def __repr__(self):
+        return self.__data
 

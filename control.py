@@ -6,6 +6,13 @@ x = Matrix([
     [7,5.12,7.23]
 ])
 
+x = Matrix([
+    [10,1,3,-7],
+    [5,4,1,12],
+    [0,2,10,11],
+    [4,3,20,11]
+])
+
 # x = [
 #     [5, 11, 0],
 #     [4, 57, 5],
@@ -25,3 +32,4 @@ y = Matrix([
 print(x.size)
 print(x.determineRC())
 print(x.determineG())
+print(x.determineR())
