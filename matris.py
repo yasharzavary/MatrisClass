@@ -34,6 +34,17 @@ class Matrix:
     def mData(self, newData):
         self.__data = self.check(newData)
 
+
+    def size(self):
+        pass
+
+    @property
+    def isEmpty(self):
+        if self.__data == []:
+            return True
+        return False
+
+
     @staticmethod
     def check(can, t='e'):
         # TODO: write document for this function
@@ -62,14 +73,26 @@ class Matrix:
         return [canData] if not isinstance(canData[0], list) else canData
 
     def connect(self, other, t = True):
+        # TODO: correct empty list connection 
+        # TODO: from row or col connect op
+        # TODO: both of them empty
         """
         it will connect two matrix with togheter and send it back
         other: second matrix or list for connecting
         t: you can set it to False to return list 
         return: one matrix(in list type)
         """
-        if isinstance(other, Matrix) : return self.__data + other.mData if not t else Matrix(self.__data + other.mData)
+        if isinstance(other, Matrix) :
+            if other.isEmpty:
+                return self if t else self.__data
+            elif self.isEmpty:
+                return other if t else other.mData
+            return self.__data + other.mData if not t else Matrix(self.__data + other.mData)
         if not isinstance(other, list): raise TypeError('please check second matrix')
+        if self.isEmpty:
+            return Matrix(other) if t else other
+        elif len(other) == 0:
+            return self if t else self.__data
         return self.__data + self.__valid1D(other) if not t else Matrix(self.__data + self.__valid1D(other))
 
     def determineRC(self):
